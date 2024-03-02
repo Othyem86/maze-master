@@ -1,5 +1,5 @@
-from gui.shapes import *
-from gui.window import *
+from gui.window import Window
+from gui.basic_shapes import Line, Point
 
 def main():
     win = Window(800, 600)
