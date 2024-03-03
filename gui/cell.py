@@ -1,6 +1,5 @@
 from gui.basic_shapes import Point, Line
 from gui.window import Window
-from gui.cell import Cell
 
 class Cell:
     def __init__(self, win: Window = None) -> None:
@@ -32,7 +31,7 @@ class Cell:
             line = Line(Point(x1, y2), Point(x2, y2))
             self._win.draw_line(line)
 
-    def draw_move(self, to_cell: Cell, undo:bool = False):
+    def draw_move(self, to_cell, undo:bool = False):
         x_mid = (self._x1 + self._x2) / 2
         y_mid = (self._y1 + self._y2) / 2
         to_x_mid = (to_cell._x1 + to_cell._x2) / 2
