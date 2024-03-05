@@ -18,18 +18,22 @@ class Cell:
         self._y1 = y2
         self._x2 = x2
         self._y2 = y2
-        if self.has_left_wall:
-            line = Line(Point(x1, y1), Point(x1, y2))
-            self._win.draw_line(line)
-        if self.has_right_wall:
-            line = Line(Point(x2, y1), Point(x2, y2))
-            self._win.draw_line(line)
-        if self.has_top_wall:
-            line = Line(Point(x1, y1), Point(x2, y1))
-            self._win.draw_line(line)
-        if self.has_bottom_wall:
-            line = Line(Point(x1, y2), Point(x2, y2))
-            self._win.draw_line(line)
+        # Left wall
+        line = Line(Point(x1, y1), Point(x1, y2))
+        line_color = self.get_wall_color(self.has_left_wall)
+        self._win.draw_line(line, line_color)
+        # Right wall
+        line = Line(Point(x2, y1), Point(x2, y2))
+        line_color = self.get_wall_color(self.has_right_wall)
+        self._win.draw_line(line, line_color)
+        # Top wall
+        line = Line(Point(x1, y1), Point(x2, y1))
+        line_color = self.get_wall_color(self.has_top_wall)
+        self._win.draw_line(line, line_color)
+        # Bottom wall
+        line = Line(Point(x1, y2), Point(x2, y2))
+        line_color = self.get_wall_color(self.has_bottom_wall)
+        self._win.draw_line(line, line_color)
 
     def draw_move(self, to_cell, undo:bool = False):
         x_mid = (self._x1 + self._x2) / 2
@@ -42,3 +46,6 @@ class Cell:
             self._win.draw_line(line, line_color)
         else:
             raise ValueError("Invalid move, moves must be carthesian.")
+        
+    def get_wall_color(self, has_wall: bool) -> str:
+        return "black" if has_wall else "white" 
