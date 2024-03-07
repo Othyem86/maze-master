@@ -1,9 +1,11 @@
 from tkinter import Canvas, BOTH
 
+
 class Point:
      def __init__(self, x: int, y: int) -> None:
         self.x = x
         self.y = y
+
 
 class Line:
     def __init__(self, p1: Point, p2: Point) -> None:
