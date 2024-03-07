@@ -26,12 +26,59 @@ class Maze:
         if seed is not None:
             random.seed(seed)
         self._cells: list[list[Cell]] = []
-        self._animation_time = 0.0025
+        self._animation_time = 0.0005
         self._create_cells()
-        self._animation_time = 0.01
+        self._animation_time = 0.005
         self._break_entrance_and_exit()
-        self.break_walls_r(0, 0)
-        self.reset_visited_cells()
+        self._break_walls_r(0, 0)
+        self._reset_visited_cells()
+
+    def solve(self) -> None:
+        self._solve_r(0, 0)
+    
+    def _solve_r(self, x: int, y: int) -> bool:
+        self._animation_time = 0.005
+        self._animate()
+        matrix = self._cells
+        curr_cell = matrix[x][y]
+        curr_cell.visited = True
+
+        # Check if we are the the exit cell
+        if x == self._num_columns - 1 and y == self._num_rows - 1:
+            return True
+        
+        # Try going left recursively
+        if x > 0 and not curr_cell.has_left_wall and not matrix[x - 1][y].visited:
+            curr_cell.draw_move(matrix[x - 1][y])
+            if self._solve_r(x - 1, y):
+                return True
+            else:
+                curr_cell.draw_move(matrix[x - 1][y], True)
+        # Try going right recursively
+        if x < self._num_columns - 1 and not curr_cell.has_right_wall and not matrix[x + 1][y].visited:
+            curr_cell.draw_move(matrix[x + 1][y])
+            if self._solve_r(x + 1, y):
+                return True
+            else:
+                curr_cell.draw_move(matrix[x + 1][y], True)
+        # Try going up recursively
+        if y > 0 and not curr_cell.has_top_wall and not matrix[x][y - 1].visited:
+            curr_cell.draw_move(matrix[x][y - 1])
+            if self._solve_r(x, y - 1):
+                return True
+            else:
+                curr_cell.draw_move(matrix[x][y - 1], True)
+        # Try going down recursively
+        if y < self._num_rows - 1 and not curr_cell.has_bottom_wall and not matrix[x][y + 1].visited:
+            curr_cell.draw_move(matrix[x][y + 1])
+            if self._solve_r(x, y + 1):
+                return True
+            else:
+                curr_cell.draw_move(matrix[x][y + 1], True)
+        # Dead end
+        self._animation_time = 0.05
+        self._animate()        
+        return False
 
     def _create_cells(self) -> None:
         # Create cells
@@ -55,7 +102,6 @@ class Maze:
         self._cells[x][y].draw(cell_x1, cell_y1, cell_x2, cell_y2)
         self._animate()
 
-
     def _animate(self):
         if self._win is None:
             return
@@ -72,11 +118,12 @@ class Maze:
         self._cells[x][y].has_bottom_wall = False
         self._draw_cell(x, y)
 
-    def break_walls_r(self, x: int, y: int) -> None:
+    def _break_walls_r(self, x: int, y: int) -> None:
         matrix = self._cells
         curr_cell = matrix[x][y]
         curr_cell.visited = True
         while True:
+            # Determine not visited neighbors
             neighbors_coords: list[tuple] = []
             # Check left
             if x > 0 and matrix[x - 1][y].visited == False:
@@ -90,10 +137,12 @@ class Maze:
             # Check down
             if y < self._num_rows - 1 and matrix[x][y + 1].visited == False:
                 neighbors_coords.append((x, y + 1))
+
             # Draw cell when stop condition is met
             if len(neighbors_coords) == 0:
                 self._draw_cell(x, y)
                 return             
+            
             # Randomly pick next cell and break towards it
             next_cell_coords = neighbors_coords[random.randrange(len(neighbors_coords))]
             next_x: int = next_cell_coords[0]
@@ -115,10 +164,11 @@ class Maze:
             if next_y == y + 1:
                 curr_cell.has_bottom_wall = False
                 next_cell.has_top_wall = False
+                
             # Recursive call
-            self.break_walls_r(next_x, next_y)
+            self._break_walls_r(next_x, next_y)
     
-    def reset_visited_cells(self) -> None:
+    def _reset_visited_cells(self) -> None:
         for col in self._cells:
             for cell in col:
-                cell.visited = False
+                cell.visited = False  

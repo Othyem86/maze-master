@@ -7,7 +7,7 @@ def main():
     screen_y = 700
     win = Window(screen_x, screen_y)
     num_rows = 24
-    num_cols = 32
+    num_cols = 36
     margin = 50
     cell_size_x = (screen_x - 2 * margin) / num_cols
     cell_size_y = (screen_y - 2 * margin) / num_rows
@@ -19,6 +19,7 @@ def main():
         cell_size_x, 
         cell_size_y, 
         win)
+    maze.solve()
     win.wait_for_close()
 
 

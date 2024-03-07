@@ -17,7 +17,7 @@ class Cell:
 
     def draw(self, x1: int, y1: int, x2: int, y2: int) -> None:
         self._x1 = x1
-        self._y1 = y2
+        self._y1 = y1
         self._x2 = x2
         self._y2 = y2
         # Left wall
@@ -45,6 +45,7 @@ class Cell:
         line_color = "gray" if undo else "red"
         if y_mid == to_y_mid or x_mid == to_x_mid:
             line = Line(Point(x_mid, y_mid), Point(to_x_mid, to_y_mid))
+            # print(f"{x_mid} : {y_mid}  ->  {to_x_mid} : {to_y_mid}")
             self._win.draw_line(line, line_color)
         else:
             raise ValueError("Invalid move, moves must be carthesian.")
