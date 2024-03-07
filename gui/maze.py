@@ -31,6 +31,7 @@ class Maze:
         self._animation_time = 0.01
         self._break_entrance_and_exit()
         self.break_walls_r(0, 0)
+        self.reset_visited_cells()
 
     def _create_cells(self) -> None:
         # Create cells
@@ -116,3 +117,8 @@ class Maze:
                 next_cell.has_top_wall = False
             # Recursive call
             self.break_walls_r(next_x, next_y)
+    
+    def reset_visited_cells(self) -> None:
+        for col in self._cells:
+            for cell in col:
+                cell.visited = False
