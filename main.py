@@ -2,7 +2,7 @@ from gui.maze import Maze
 from gui.window import Window
 
 
-def main():
+def main() -> None:
     screen_x = 900
     screen_y = 700
     win = Window(screen_x, screen_y)

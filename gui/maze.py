@@ -102,7 +102,7 @@ class Maze:
         self._cells[x][y].draw(cell_x1, cell_y1, cell_x2, cell_y2)
         self._animate()
 
-    def _animate(self):
+    def _animate(self) -> None:
         if self._win is None:
             return
         self._win.redraw()
